@@ -68,8 +68,9 @@ static ERL_NIF_TERM ex_xz_make_result(ErlNifEnv* env, uint8_t* data, size_t data
     }
 
     memcpy(binary.data, data, data_size);
-
-    return enif_make_tuple2(env, enif_make_atom(env, "ok"), enif_make_binary(env, &binary));
+    ERL_NIF_TERM bin = enif_make_binary(env, &binary);
+    enif_release_binary(&binary);
+    return enif_make_tuple2(env, enif_make_atom(env, "ok"), bin);
 }
 
 static ERL_NIF_TERM ex_xz_run(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[], int mode)
@@ -95,6 +96,7 @@ static ERL_NIF_TERM ex_xz_run(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[
 
     if(ret != LZMA_OK)
     {
+        lzma_end(&stream);
         return ex_xz_make_error(env, ret);
     }
 
@@ -142,7 +144,7 @@ static ERL_NIF_TERM ex_xz_run(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[
                 {
                     enif_release_binary(&output);
                 }
-
+                lzma_end(&stream);
                 return ex_xz_make_error(env, ret);
             }
 
@@ -160,12 +162,14 @@ static ERL_NIF_TERM ex_xz_run(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[
             {
                 enif_release_binary(&output);
             }
-
+            lzma_end(&stream);
             return ex_xz_make_error(env, ret);
         }
     }
-
-    return enif_make_tuple2(env, enif_make_atom(env, "ok"), enif_make_binary(env, &output));
+    ERL_NIF_TERM bin = enif_make_binary(env, &output);
+    enif_release_binary(&output);
+    lzma_end(&stream);
+    return enif_make_tuple2(env, enif_make_atom(env, "ok"), bin);
 }
 
 static ERL_NIF_TERM ex_xz_decompress(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
