@@ -29,7 +29,7 @@ defmodule XZ.MixProject do
   defp deps do
     [
       {:ex_doc,       "~> 0.20.2", only: :dev},
-      {:elixir_make,  "~> 0.6.2"},
+      {:elixir_make,  "~> 0.7.8"},
       {:dialyxir,     "~> 1.2",     only: [:dev], runtime: false}
     ]
   end
