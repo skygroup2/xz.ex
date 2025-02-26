@@ -6,7 +6,7 @@ defmodule XZ.MixProject do
       app: :xz,
       compilers: [:elixir_make] ++ Mix.compilers,
       version: "0.4.1",
-      elixir: "~> 1.11",
+      elixir: "~> 1.16",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       description: description(),
@@ -28,9 +28,9 @@ defmodule XZ.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:ex_doc,       "~> 0.20.2", only: :dev},
-      {:elixir_make,  "~> 0.7.8"},
-      {:dialyxir,     "~> 1.2",     only: [:dev], runtime: false}
+      {:elixir_make,  "~> 0.7.8", runtime: false},
+      {:ex_doc, "~> 0.37.2", only: :dev},
+      {:dialyxir, "~> 1.4", only: [:dev], runtime: false}
     ]
   end
 

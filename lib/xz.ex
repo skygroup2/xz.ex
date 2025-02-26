@@ -11,7 +11,7 @@ defmodule XZ do
   """
   @spec init() :: :ok
   def init,
-    do: :ok = :erlang.load_nif(:filename.join(:code.priv_dir(unquote(app)), 'nif'), 0)
+    do: :ok = :erlang.load_nif(:filename.join(:code.priv_dir(unquote(app)), ~c"nif"), 0)
 
   @spec compress(data :: binary()) :: {:ok, binary()} | {:error, term()}
   def compress(data),
